@@ -18,7 +18,7 @@ struct GameSceneView: View {
         let screenSize = UIScreen.main.bounds.size
         scene.size = screenSize
         scene.scaleMode = .aspectFill
-        scene.backgroundColor = .black
+        scene.backgroundColor = .lightGray
         return scene
     }
     
