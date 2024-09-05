@@ -1,0 +1,120 @@
+2024-09-03 11:43:09 +0000  Initial pipeline context: <IDEDistributionProcessingPipelineContext: 0x7fd645e60eb0; archive(resolved)="<IDEArchive: 0x600031937c00>", distributionTask(resolved)="2", distributionDestination(resolved)="1", distributionMethod(resolved)="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team(resolved)="<IDEProvisioningDisambiguatableBasicTeam: 0x6000024008c0; teamID='U6FJ4LV4XK', teamName='Manish Kakkar', teamType='Individual', username='manishkakkar07@gmail.com', isFreeProvisioningTeam='0'>">
+	Chain (14, self inclusive):
+	<IDEDistributionProcessingPipelineContext: 0x7fd645e60eb0; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x6000024008c0; teamID='U6FJ4LV4XK', teamName='Manish Kakkar', teamType='Individual', username='manishkakkar07@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionProcessingPipelineContext: 0x7fd670ca3ec0; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x6000024008c0; teamID='U6FJ4LV4XK', teamName='Manish Kakkar', teamType='Individual', username='manishkakkar07@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x7fd645e59a00; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x6000024008c0; teamID='U6FJ4LV4XK', teamName='Manish Kakkar', teamType='Individual', username='manishkakkar07@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x7fd66a72cc20; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x6000024008c0; teamID='U6FJ4LV4XK', teamName='Manish Kakkar', teamType='Individual', username='manishkakkar07@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x7fd64819f390; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x6000024008c0; teamID='U6FJ4LV4XK', teamName='Manish Kakkar', teamType='Individual', username='manishkakkar07@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x7fd66b440dd0; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x6000024008c0; teamID='U6FJ4LV4XK', teamName='Manish Kakkar', teamType='Individual', username='manishkakkar07@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x7fd659320c90; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x6000024008c0; teamID='U6FJ4LV4XK', teamName='Manish Kakkar', teamType='Individual', username='manishkakkar07@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x7fd670c1e790; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x6000024008c0; teamID='U6FJ4LV4XK', teamName='Manish Kakkar', teamType='Individual', username='manishkakkar07@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x7fd66a739200; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x6000024008c0; teamID='U6FJ4LV4XK', teamName='Manish Kakkar', teamType='Individual', username='manishkakkar07@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x7fd65ac78760; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="(null)">
+	<IDEDistributionContext: 0x7fd66ed0ee80; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="(null)">
+	<IDEDistributionContext: 0x7fd65aceb330; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="(null)">
+	<IDEDistributionContext: 0x7fd65940ed70; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="<IDEDistributionMethodDevelopmentSigned: 0x600017e75630>", team="(null)">
+	<IDEDistributionContext: 0x7fd649f30170; archive = "<IDEArchive: 0x600031937c00>", distributionMethod="(null)", team="(null)">
+</IDEDistributionProcessingPipelineContext: 0x7fd645e60eb0>
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionCreateDestRootStep
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionCopyItemStep
+2024-09-03 11:43:09 +0000  Running /usr/bin/ditto '-V' '/Users/iic/Library/Developer/Xcode/Archives/2024-09-03/BuildUp 03-09-24, 5.12 PM.xcarchive/Products/Applications/BuildUp.app' '/var/folders/21/mrz3k9rj6b36nr0w97xg7_s80000gn/T/XcodeDistPipeline.~~~0KY06N/Root/Payload/BuildUp.app'
+2024-09-03 11:43:09 +0000  >>> Copying /Users/iic/Library/Developer/Xcode/Archives/2024-09-03/BuildUp 03-09-24, 5.12 PM.xcarchive/Products/Applications/BuildUp.app 
+2024-09-03 11:43:09 +0000  copying file ./_CodeSignature/CodeResources ... 
+2024-09-03 11:43:09 +0000  2541 bytes for ./_CodeSignature/CodeResources
+2024-09-03 11:43:09 +0000  copying file ./AppIcon60x60@2x.png ... 
+2024-09-03 11:43:09 +0000  8705 bytes for ./AppIcon60x60@2x.png
+copying file ./Assets.car ... 
+2024-09-03 11:43:09 +0000  100143 bytes for ./Assets.car
+2024-09-03 11:43:09 +0000  copying file ./BuildUp ... 
+2024-09-03 11:43:09 +0000  98864 bytes for ./BuildUp
+2024-09-03 11:43:09 +0000  copying file ./embedded.mobileprovision ... 
+2024-09-03 11:43:09 +0000  26196 bytes for ./embedded.mobileprovision
+2024-09-03 11:43:09 +0000  copying file ./Info.plist ... 
+2024-09-03 11:43:09 +0000  1198 bytes for ./Info.plist
+copying file ./PkgInfo ... 
+2024-09-03 11:43:09 +0000  8 bytes for ./PkgInfo
+2024-09-03 11:43:09 +0000  /usr/bin/ditto exited with 0
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionEmbedProfileStep
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionInfoPlistStep
+2024-09-03 11:43:09 +0000  Skipping step: IDEDistributionInfoPlistStep because it said so
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionAppThinningPlistStep
+2024-09-03 11:43:09 +0000  Skipping step: IDEDistributionAppThinningPlistStep because it said so
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionCompileBitcodeStep
+2024-09-03 11:43:09 +0000  Skipping step: IDEDistributionCompileBitcodeStep because it said so
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionCodeSlimmingStep
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionCopyBCSymbolMapsStep
+2024-09-03 11:43:09 +0000  Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionSymbolsStep
+2024-09-03 11:43:09 +0000  Skipping step: IDEDistributionSymbolsStep because it said so
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionAppThinningStep
+2024-09-03 11:43:09 +0000  Skipping step: IDEDistributionAppThinningStep because it said so
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionArchThinningStep
+2024-09-03 11:43:09 +0000  Running /Users/iic/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo '/var/folders/21/mrz3k9rj6b36nr0w97xg7_s80000gn/T/XcodeDistPipeline.~~~0KY06N/Root/Payload/BuildUp.app/BuildUp' '-verify_arch' 'arm64e'
+2024-09-03 11:43:09 +0000  /Users/iic/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo exited with 1
+2024-09-03 11:43:09 +0000  Skipping architecture thinning for item "BuildUp" because arch "arm64e" wasn't found
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionODRStep
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionStripXattrsStep
+2024-09-03 11:43:09 +0000  Running /usr/bin/xattr '-crs' '/var/folders/21/mrz3k9rj6b36nr0w97xg7_s80000gn/T/XcodeDistPipeline.~~~0KY06N/Root/Payload/BuildUp.app'
+2024-09-03 11:43:09 +0000  /usr/bin/xattr exited with 0
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionCodesignStep
+2024-09-03 11:43:09 +0000  Entitlements for <IDEDistributionItem: 0x60003580dd40; bundleID='SwiftUI.BuildUp', path='<DVTFilePath:0x60005d767410:'/Users/iic/Library/Developer/Xcode/Archives/2024-09-03/BuildUp 03-09-24, 5.12 PM.xcarchive/Products/Applications/BuildUp.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600049fac730; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x600028b034f0; name='Apple Development: Manish Kakkar (G856HQWCJ2)', hash='3B76090DAA297A83761FFD054902E394BB038B02', serialNumber='78C609A725C3EE0282272E59DCA4FBD5', certificateKinds='(
+    "1.2.840.113635.100.6.1.12",
+    "1.2.840.113635.100.6.1.2"
+), issueDate='2024-04-08 06:11:01 +0000''>', entitlements='{
+    "application-identifier" = "U6FJ4LV4XK.SwiftUI.BuildUp";
+    "com.apple.developer.team-identifier" = U6FJ4LV4XK;
+    "get-task-allow" = 1;
+}', teamID='U6FJ4LV4XK', identifier='SwiftUI.BuildUp', executablePath='<DVTFilePath:0x60003580dc20:'/Users/iic/Library/Developer/Xcode/Archives/2024-09-03/BuildUp 03-09-24, 5.12 PM.xcarchive/Products/Applications/BuildUp.app/BuildUp'>', hardenedRuntime='0'>'>: {
+    "application-identifier" = "U6FJ4LV4XK.SwiftUI.BuildUp";
+    "com.apple.developer.team-identifier" = U6FJ4LV4XK;
+    "get-task-allow" = 1;
+}
+2024-09-03 11:43:09 +0000  Entitlements for <IDEDistributionItem: 0x60003580dd40; bundleID='SwiftUI.BuildUp', path='<DVTFilePath:0x60005d767410:'/Users/iic/Library/Developer/Xcode/Archives/2024-09-03/BuildUp 03-09-24, 5.12 PM.xcarchive/Products/Applications/BuildUp.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600049fac730; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x600028b74840; name='Apple Development: Manish Kakkar (G856HQWCJ2)', hash='3B76090DAA297A83761FFD054902E394BB038B02', serialNumber='78C609A725C3EE0282272E59DCA4FBD5', certificateKinds='(
+    "1.2.840.113635.100.6.1.12",
+    "1.2.840.113635.100.6.1.2"
+), issueDate='2024-04-08 06:11:01 +0000''>', entitlements='{
+    "application-identifier" = "U6FJ4LV4XK.SwiftUI.BuildUp";
+    "com.apple.developer.team-identifier" = U6FJ4LV4XK;
+    "get-task-allow" = 1;
+}', teamID='U6FJ4LV4XK', identifier='SwiftUI.BuildUp', executablePath='<DVTFilePath:0x60003580dc20:'/Users/iic/Library/Developer/Xcode/Archives/2024-09-03/BuildUp 03-09-24, 5.12 PM.xcarchive/Products/Applications/BuildUp.app/BuildUp'>', hardenedRuntime='0'>'> are: {
+    "application-identifier" = "U6FJ4LV4XK.SwiftUI.BuildUp";
+    "com.apple.developer.team-identifier" = U6FJ4LV4XK;
+    "get-task-allow" = 1;
+}
+2024-09-03 11:43:09 +0000  Writing entitlements for <IDEDistributionItem: 0x60003580dd40; bundleID='SwiftUI.BuildUp', path='<DVTFilePath:0x60005d767410:'/Users/iic/Library/Developer/Xcode/Archives/2024-09-03/BuildUp 03-09-24, 5.12 PM.xcarchive/Products/Applications/BuildUp.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600049fac730; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x600008bda940; name='Apple Development: Manish Kakkar (G856HQWCJ2)', hash='3B76090DAA297A83761FFD054902E394BB038B02', serialNumber='78C609A725C3EE0282272E59DCA4FBD5', certificateKinds='(
+    "1.2.840.113635.100.6.1.12",
+    "1.2.840.113635.100.6.1.2"
+), issueDate='2024-04-08 06:11:01 +0000''>', entitlements='{
+    "application-identifier" = "U6FJ4LV4XK.SwiftUI.BuildUp";
+    "com.apple.developer.team-identifier" = U6FJ4LV4XK;
+    "get-task-allow" = 1;
+}', teamID='U6FJ4LV4XK', identifier='SwiftUI.BuildUp', executablePath='<DVTFilePath:0x60003580dc20:'/Users/iic/Library/Developer/Xcode/Archives/2024-09-03/BuildUp 03-09-24, 5.12 PM.xcarchive/Products/Applications/BuildUp.app/BuildUp'>', hardenedRuntime='0'>'> to: /var/folders/21/mrz3k9rj6b36nr0w97xg7_s80000gn/T/XcodeDistPipeline.~~~0KY06N/entitlements~~~EyFo3V
+2024-09-03 11:43:09 +0000  Running /usr/bin/codesign '-vvv' '--force' '--sign' '3B76090DAA297A83761FFD054902E394BB038B02' '--entitlements' '/var/folders/21/mrz3k9rj6b36nr0w97xg7_s80000gn/T/XcodeDistPipeline.~~~0KY06N/entitlements~~~EyFo3V' '--generate-entitlement-der' '--preserve-metadata=identifier,flags,runtime' '/var/folders/21/mrz3k9rj6b36nr0w97xg7_s80000gn/T/XcodeDistPipeline.~~~0KY06N/Root/Payload/BuildUp.app'
+2024-09-03 11:43:09 +0000  /var/folders/21/mrz3k9rj6b36nr0w97xg7_s80000gn/T/XcodeDistPipeline.~~~0KY06N/Root/Payload/BuildUp.app: replacing existing signature
+2024-09-03 11:43:09 +0000  /var/folders/21/mrz3k9rj6b36nr0w97xg7_s80000gn/T/XcodeDistPipeline.~~~0KY06N/Root/Payload/BuildUp.app: signed app bundle with Mach-O thin (arm64) [SwiftUI.BuildUp]
+2024-09-03 11:43:09 +0000  /usr/bin/codesign exited with 0
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionZipODRItemStep
+2024-09-03 11:43:09 +0000  Skipping step: IDEDistributionZipODRItemStep because it said so
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionCreateIPAStep
+2024-09-03 11:43:09 +0000  Running /usr/bin/ditto '-V' '-c' '-k' '--norsrc' '/var/folders/21/mrz3k9rj6b36nr0w97xg7_s80000gn/T/XcodeDistPipeline.~~~0KY06N/Root' '/var/folders/21/mrz3k9rj6b36nr0w97xg7_s80000gn/T/XcodeDistPipeline.~~~0KY06N/Packages/BuildUp.ipa'
+2024-09-03 11:43:09 +0000  >>> Copying /var/folders/21/mrz3k9rj6b36nr0w97xg7_s80000gn/T/XcodeDistPipeline.~~~0KY06N/Root 
+2024-09-03 11:43:09 +0000  copying file ./Payload/BuildUp.app/_CodeSignature/CodeResources ... 
+2024-09-03 11:43:09 +0000  2541 bytes for ./Payload/BuildUp.app/_CodeSignature/CodeResources
+2024-09-03 11:43:09 +0000  copying file ./Payload/BuildUp.app/AppIcon60x60@2x.png ... 
+2024-09-03 11:43:09 +0000  8705 bytes for ./Payload/BuildUp.app/AppIcon60x60@2x.png
+2024-09-03 11:43:09 +0000  copying file ./Payload/BuildUp.app/Assets.car ... 
+2024-09-03 11:43:09 +0000  100143 bytes for ./Payload/BuildUp.app/Assets.car
+2024-09-03 11:43:09 +0000  copying file ./Payload/BuildUp.app/BuildUp ... 
+2024-09-03 11:43:09 +0000  98864 bytes for ./Payload/BuildUp.app/BuildUp
+2024-09-03 11:43:09 +0000  copying file ./Payload/BuildUp.app/embedded.mobileprovision ... 
+2024-09-03 11:43:09 +0000  26196 bytes for ./Payload/BuildUp.app/embedded.mobileprovision
+copying file ./Payload/BuildUp.app/Info.plist ... 
+2024-09-03 11:43:09 +0000  1198 bytes for ./Payload/BuildUp.app/Info.plist
+copying file ./Payload/BuildUp.app/PkgInfo ... 
+8 bytes for ./Payload/BuildUp.app/PkgInfo
+2024-09-03 11:43:09 +0000  /usr/bin/ditto exited with 0
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionAppStoreInformationStep
+2024-09-03 11:43:09 +0000  Skipping step: IDEDistributionAppStoreInformationStep because it said so
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionGenerateProcessedDistributionItems
+2024-09-03 11:43:09 +0000  IDEDistributionItem init <DVTFilePath:0x60005d77f170:'/var/folders/21/mrz3k9rj6b36nr0w97xg7_s80000gn/T/XcodeDistPipeline.~~~0KY06N/Root/Payload/BuildUp.app'>
+2024-09-03 11:43:09 +0000  Processing step: IDEDistributionCreateManifestStep

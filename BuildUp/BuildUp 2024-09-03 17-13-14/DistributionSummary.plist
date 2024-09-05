@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BuildUp.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>1</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>3B76090DAA297A83761FFD054902E394BB038B02</string>
+				<key>dateExpires</key>
+				<string>08/04/25</string>
+				<key>type</key>
+				<string>Apple Development</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>U6FJ4LV4XK.SwiftUI.BuildUp</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>U6FJ4LV4XK</string>
+				<key>get-task-allow</key>
+				<true/>
+			</dict>
+			<key>name</key>
+			<string>BuildUp.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>052f372c-0566-4a5a-aecc-67b14faecfaa</string>
+				<key>dateExpires</key>
+				<string>27/08/25</string>
+				<key>name</key>
+				<string>iOS Team Provisioning Profile: *</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>U6FJ4LV4XK</string>
+				<key>name</key>
+				<string>Manish Kakkar</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>
