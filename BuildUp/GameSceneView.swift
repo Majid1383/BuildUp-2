@@ -11,6 +11,7 @@ import SpriteKit
 struct GameSceneView: View {
     
     @StateObject private var gameScene = GameScene()
+    @State private var rectangleYPosition: CGFloat = 60
     
     var scene: SKScene{
         
@@ -18,20 +19,29 @@ struct GameSceneView: View {
         let screenSize = UIScreen.main.bounds.size
         scene.size = screenSize
         scene.scaleMode = .aspectFill
-        scene.backgroundColor = .lightGray
+        scene.backgroundColor = .gray
+        scene.updateRectanglePosition(yPosition: rectangleYPosition)
         return scene
     }
     
         var body: some View {
             ZStack{
+                 
                 SpriteView(scene: scene)
                     .edgesIgnoringSafeArea(.all)
-    
-                Rectangle()
-                    .stroke(
-                        Color.white, style: StrokeStyle(lineWidth: 2))
-                    .frame(width: UIScreen.main.bounds.width, height: 10)
-                    .position(x: UIScreen.main.bounds.width / 2, y: 55)
+                
+//                Rectangle()
+//                    .stroke(
+//                        Color.green, style: StrokeStyle(lineWidth: 1))
+//                    .frame(width: UIScreen.main.bounds.width, height: 1)
+//                    .position(x: UIScreen.main.bounds.width / 2 , y: 60)
+         
+                
+//                Rectangle()
+//                    .stroke(
+//                        Color.green, style: StrokeStyle(lineWidth: 1))
+//                    .frame(width: UIScreen.main.bounds.width, height: 1)
+//                    .position(x: UIScreen.main.bounds.width / 2, y: rectangleYPosition)
             }
         }
 }

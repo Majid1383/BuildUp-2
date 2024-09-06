@@ -14,13 +14,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     private let skView = SKView()
     private let motionManager = CMMotionManager()
     
+    var rectangleYPosition: CGFloat = 0.0
+    
     let stageCategory: UInt32 = 0x1 << 0
     let boxStrokeCategory: UInt32 = 0x1 << 1
     
     var nodeHeight: CGFloat = 0.0
-    
     var createdNodes: [SKShapeNode] = []
-   
+    
+    func updateRectanglePosition(yPosition: CGFloat) {
+        
+        self.rectangleYPosition = yPosition
+        print("Rectangle y-position in GameScene: \(rectangleYPosition)")
+    }
    
     override func didMove(to view: SKView) {
         
@@ -31,10 +37,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         skView.layer.borderWidth = 5.0
         skView.layer.borderColor = UIColor.magenta.cgColor
-        view.addSubview(skView)
+//        view.addSubview(skView)
         self.physicsWorld.contactDelegate = self
         
-        let stage = globalFunctions.createCustomShapeNode(rectOfSize: BoxSize.rectangle(70, 20).size,
+        let stage = globalFunctions.createCustomShapeNode(rectOfSize: BoxSize.rectangle(150, 1).size,
                                                           fillColor: .clear,
                                                           strokeColor: .red,
                                                           lineWidth: 2,
@@ -51,11 +57,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         let stageWidth = self.size.width - 5
         stage.scene?.size = CGSize(width: stageWidth, height: stage.frame.size.height)
-        let stagePosition = CGPoint(x: self.size.width / 2 , y: stage.frame.size.height / 2 + 10)
+        
+        let stagePosition = CGPoint(x: self.size.width / 2 , y: stage.frame.size.height / 2 + 5)
         stage.position = stagePosition
+        
+        let screenHeight = UIScreen.main.bounds.height; print("uiScreen", screenHeight)
+        
+        
+        let stageHeight = stage.frame.size.height
+        let yOffset: CGFloat = 600
+
+        let finishBar = SKShapeNode(rectOf: BoxSize.rectangle(UIScreen.main.bounds.width, 1).size)
+
+        // Set position relative to stage
+        finishBar.position = CGPoint(x: UIScreen.main.bounds.width / 2,
+                                     y: stage.position.y + stageHeight / 2 + yOffset)
+        
+        print("finishBar",finishBar.position.y)
+
+        self.addChild(finishBar)
         self.addChild(stage)
     }
-    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
@@ -99,7 +121,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         logBoxStrokePositions()
         
-        
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -132,7 +153,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 extension GameScene{
     //Stop OverLapping
     func isOverLapping(newNode: SKShapeNode) -> Bool {
-        
         for node in self.children where node is SKShapeNode {
             if node.frame.intersects(newNode.frame){
                 return true
@@ -146,27 +166,26 @@ extension GameScene{
     func randomNeonColor() -> SKColor {
         let randomColorComponent = { CGFloat.random(in: 0.5...1.0) }
         
-        // Create a random combination for neon effect
         let red = randomColorComponent()
         let green = randomColorComponent()
         let blue = randomColorComponent()
         
-        // Emphasize neon by ensuring at least one component is near maximum
         let components = [red, green, blue].shuffled()
         return SKColor(red: components[0], green: components[1], blue: components[2], alpha: 1.0)
     }
     
     func createBoxStroke() -> SKShapeNode {
         
-        let size = BoxSize.rectangle(50, 50).size
+        let size = BoxSize.rectangle(70, 70).size
         let height = size.height
         self.nodeHeight = height
+        print("self.nodeHeight",self.nodeHeight)
             
             let boxStroke = globalFunctions.createCustomShapeNode(
                 rectOfSize: size,
                 fillColor: .clear,
                 strokeColor: randomNeonColor(),
-                lineWidth: 2,
+                lineWidth: 4,
                 affectedByGravity: true,
                 isDynamic: true,
                 allowsRotation: true,
@@ -232,6 +251,7 @@ extension GameScene{
 //    }
     
     func logBoxStrokePositions() {
+        
         for (index, node) in createdNodes.enumerated() {
             let position = node.position
             print("BoxStroke \(index + 1): Position = (\(position.x), \(position.y))")
@@ -239,27 +259,30 @@ extension GameScene{
             // Check if there's a next node to compare
             if index < createdNodes.count - 1 {
                 
-                let currentTop = node.frame.origin.y + node.frame.size.height
-                let nextNode = createdNodes[index + 1]
-                let nextBottom = nextNode.frame.origin.y
+                let currentTop = node.frame.origin.y + node.frame.size.height; print("currentTop",currentTop)
+                
+                let nextNode = createdNodes[index + 1]; print("nextNode",nextNode)
+                let nextBottom = nextNode.frame.origin.y; print("nextBottom",nextBottom)
                 let tolerance: CGFloat = 1.0
                 
-                let roundCurrentTop = round(currentTop * 100) / 100
-                let roundNextBottom = round(nextBottom * 100) / 100
+                let roundCurrentTop = round(currentTop * 100) / 100 ; print("roundCurrentTop",roundCurrentTop)
+                let roundNextBottom = round(nextBottom * 100) / 100 ; print("roundNextBottom",roundNextBottom)
                 
-                let targetPosition : CGFloat = 651
-                let secondTargetPosition : CGFloat = 651 - self.nodeHeight
+                let targetPosition = CGPoint(x: UIScreen.main.bounds.width / 2, y: self.rectangleYPosition); print("targetPosition",targetPosition)
+                let screenHeight = UIScreen.main.bounds.height; print("screenHeight", screenHeight)
+                let yPosition : CGFloat = targetPosition.y ; print("yPosition", yPosition)
+                let finalPoint = screenHeight - yPosition; print("finalPoint",finalPoint)
                 
+                
+                let secondTargetPosition : CGFloat = finalPoint - self.nodeHeight; print("secondTargetPosition",secondTargetPosition)
                 
                 if abs(roundNextBottom - roundCurrentTop) <= tolerance {
                     print("BoxStroke \(index + 1) top matches BoxStroke \(index + 2) bottom.")
-                    
-                    if roundNextBottom >= targetPosition && roundCurrentTop >= secondTargetPosition  {
+                    if roundNextBottom >= finalPoint && roundCurrentTop >= secondTargetPosition  {
                         print("Level Cleared")
                     }else {
                         print("TryAgain!")
                     }
- 
                     
                 } else {
                     print("BoxStroke \(index + 1) top does NOT match BoxStroke \(index + 2) bottom.")

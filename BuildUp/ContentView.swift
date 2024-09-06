@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var showAlert = false
+    @State private var showGameScene = false
     
     var body: some View {
 //        GameSceneView()
@@ -21,15 +22,32 @@ struct ContentView: View {
                 
                 Text("BuildUp")
                     .font(.largeTitle).bold()
-                
-                NavigationLink(destination: GameSceneView()){
-                    Text("Play Now!").font(.title2).fontWeight(.semibold)
+               
+                Button(action: {
+                    showGameScene = true
+                }) {
+                    Text("Play Now!")
+                        .font(.title2)
+                        .fontWeight(.semibold)
                         .frame(width: 160, height: 50)
                         .padding()
                         .frame(height: 350)
                         .position(x: UIScreen.main.bounds.width / 2, y: 0)
                         .padding(.top, 30)
                 }
+                .fullScreenCover(isPresented: $showGameScene) {
+                    GameSceneView() // Present the GameSceneView from the bottom
+                }
+
+                
+//                NavigationLink(destination: GameSceneView()){
+//                    Text("Play Now!").font(.title2).fontWeight(.semibold)
+//                        .frame(width: 160, height: 50)
+//                        .padding()
+//                        .frame(height: 350)
+//                        .position(x: UIScreen.main.bounds.width / 2, y: 0)
+//                        .padding(.top, 30)
+//                }
                 
                 Button("Exit") {
                     showAlert = true
