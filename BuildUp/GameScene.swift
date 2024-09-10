@@ -9,9 +9,9 @@ import SwiftUI
 import SpriteKit
 import CoreMotion
 
+
 class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
-    private let skView = SKView()
     private let motionManager = CMMotionManager()
     
     var rectangleYPosition: CGFloat = 0.0
@@ -19,25 +19,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     let stageCategory: UInt32 = 0x1 << 0
     let boxStrokeCategory: UInt32 = 0x1 << 1
     
+    var finishBarYPosition : CGFloat = 0.0
+    
     var nodeHeight: CGFloat = 0.0
     var createdNodes: [SKShapeNode] = []
     
-    func updateRectanglePosition(yPosition: CGFloat) {
-        
-        self.rectangleYPosition = yPosition
-        print("Rectangle y-position in GameScene: \(rectangleYPosition)")
-    }
+    var finishBar = SKShapeNode()
+    
+    var currentLevelNumber : Int = 1
+    
+    let levels : [GameLevel] = [GameLevel(levelNumber: 01, nodeSize: BoxSize.square(10).size),
+                                GameLevel(levelNumber: 02, nodeSize: BoxSize.rectangle(20,40).size),
+                                GameLevel(levelNumber: 03, nodeSize: BoxSize.square(40).size)]
    
     override func didMove(to view: SKView) {
         
         self.physicsWorld.contactDelegate = self
         self.physicsWorld.gravity = CGVector(dx: 0, dy: -9.8)
         motionManager.startAccelerometerUpdates()
-        //        physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         
-        skView.layer.borderWidth = 5.0
-        skView.layer.borderColor = UIColor.magenta.cgColor
-//        view.addSubview(skView)
+        let screenBounds = UIScreen.main.bounds
+        let screenWidth = UIScreen.main.bounds.width
+        self.size = screenBounds.size
+        
         self.physicsWorld.contactDelegate = self
         
         let stage = globalFunctions.createCustomShapeNode(rectOfSize: BoxSize.rectangle(150, 1).size,
@@ -55,35 +59,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         stage.physicsBody?.contactTestBitMask = boxStrokeCategory
         stage.physicsBody?.collisionBitMask = boxStrokeCategory
         
-        let stageWidth = self.size.width - 5
-        stage.scene?.size = CGSize(width: stageWidth, height: stage.frame.size.height)
+//        let stageWidth = self.size.width - 5
+//        stage.scene?.size = CGSize(width: stageWidth, height: stage.frame.size.height)
+//        
+//        let stagePosition = CGPoint(x: self.size.width / 2 , y: stage.frame.size.height / 2 + 5)
+//        stage.position = stagePosition
         
         let stagePosition = CGPoint(x: self.size.width / 2 , y: stage.frame.size.height / 2 + 5)
         stage.position = stagePosition
         
-        let screenHeight = UIScreen.main.bounds.height; print("uiScreen", screenHeight)
         
+        finishBar = SKShapeNode(rectOf: CGSize(width: screenWidth ,height: 1))
+        finishBar.strokeColor = .white
+        finishBar.position = CGPoint(x: screenWidth / 2 ,
+                                     y: self.size.height - 125)
         
-        let stageHeight = stage.frame.size.height
-        let yOffset: CGFloat = 600
-
-        let finishBar = SKShapeNode(rectOf: BoxSize.rectangle(UIScreen.main.bounds.width, 1).size)
-
-        // Set position relative to stage
-        finishBar.position = CGPoint(x: UIScreen.main.bounds.width / 2,
-                                     y: stage.position.y + stageHeight / 2 + yOffset)
+                
+        self.finishBarYPosition = finishBar.position.y
+        print("self.finishBarYPosition",self.finishBarYPosition)
         
-        print("finishBar",finishBar.position.y)
-
-        self.addChild(finishBar)
         self.addChild(stage)
+        self.addChild(finishBar)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         guard let touch = touches.first else {return}
-        
         let touchPoint = touch.location(in: self)
+         
+        guard let level = loadLevel(myLevelNumber: currentLevelNumber) else {return}
         
         let boxStroke = createBoxStroke()
         boxStroke.position = touchPoint
@@ -94,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             createdNodes.append(boxStroke)
             print("createdNodes", createdNodes.count)
         } else {
-            print("Node is overlapping, can't add!")
+//            print("Node is overlapping, can't add!")
         }
         
     }
@@ -114,13 +118,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                 
                 if let index = createdNodes.firstIndex(of: node){
                     createdNodes.remove(at: index)
-                    print("Node removed, current count:", createdNodes.count)
+                    //print("Node removed, current count:", createdNodes.count)
                 }
             }
         }
         
         logBoxStrokePositions()
-        
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -128,18 +131,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         let bodyB = contact.bodyB
         
         if (bodyA.categoryBitMask == stageCategory && bodyB.categoryBitMask == boxStrokeCategory) ||  (bodyA.categoryBitMask == boxStrokeCategory && bodyB.categoryBitMask == stageCategory) {
-            print("Stage and BoxStroke have contacted!")
+//            print("Stage and BoxStroke have contacted!")
         }else if bodyA.categoryBitMask == boxStrokeCategory && bodyB.categoryBitMask == boxStrokeCategory {
-            print("Two BoxStroke nodes have contacted!")
+//            print("Two BoxStroke nodes have contacted!")
             
             guard let nodeA = bodyA.node as? SKShapeNode,
                   let nodeB = bodyB.node as? SKShapeNode else {return}
             
             if isNodeOnTop(of: nodeA, on: nodeB){
-                print("Node \(nodeA.name ?? "A") is on top of Node \(nodeB.name ?? "B")")
+//                print("Node \(nodeA.name ?? "A") is on top of Node \(nodeB.name ?? "B")")
                 nodeA.position.y = nodeB.frame.maxY + nodeA.frame.height / 2
             }else if isNodeOnTop(of: nodeB, on: nodeA) {
-                print("Node \(nodeB.name ?? "B") is on top of Node \(nodeA.name ?? "A")")
+//                print("Node \(nodeB.name ?? "B") is on top of Node \(nodeA.name ?? "A")")
                 // Example: Snap nodeB into place above nodeA
                 nodeB.position.y = nodeA.frame.maxY + nodeB.frame.height / 2
             }
@@ -160,12 +163,11 @@ extension GameScene{
         }
         return false
     }
-     
- 
+    
+    
     //RandomColour
     func randomNeonColor() -> SKColor {
         let randomColorComponent = { CGFloat.random(in: 0.5...1.0) }
-        
         let red = randomColorComponent()
         let green = randomColorComponent()
         let blue = randomColorComponent()
@@ -179,30 +181,30 @@ extension GameScene{
         let size = BoxSize.rectangle(70, 70).size
         let height = size.height
         self.nodeHeight = height
-        print("self.nodeHeight",self.nodeHeight)
-            
-            let boxStroke = globalFunctions.createCustomShapeNode(
-                rectOfSize: size,
-                fillColor: .clear,
-                strokeColor: randomNeonColor(),
-                lineWidth: 4,
-                affectedByGravity: true,
-                isDynamic: true,
-                allowsRotation: true,
-                linearDamping: 0.1,
-                friction: 0.5,
-                restitution: 0.1
-            )
+        //        print("self.nodeHeight",self.nodeHeight)
+        
+        let boxStroke = globalFunctions.createCustomShapeNode(
+            rectOfSize: size,
+            fillColor: .clear,
+            strokeColor: randomNeonColor(),
+            lineWidth: 4,
+            affectedByGravity: true,
+            isDynamic: true,
+            allowsRotation: true,
+            linearDamping: 0.1,
+            friction: 0.5,
+            restitution: 0.1
+        )
         
         let contactBitMask: UInt32 = stageCategory | boxStrokeCategory
         
-            boxStroke.physicsBody = SKPhysicsBody(rectangleOf: boxStroke.frame.size)
-            boxStroke.physicsBody?.categoryBitMask = boxStrokeCategory
-            boxStroke.physicsBody?.contactTestBitMask = contactBitMask
-            boxStroke.physicsBody?.collisionBitMask = contactBitMask
-           
-            return boxStroke
-        }
+        boxStroke.physicsBody = SKPhysicsBody(rectangleOf: boxStroke.frame.size)
+        boxStroke.physicsBody?.categoryBitMask = boxStrokeCategory
+        boxStroke.physicsBody?.contactTestBitMask = contactBitMask
+        boxStroke.physicsBody?.collisionBitMask = contactBitMask
+        
+        return boxStroke
+    }
     
     
     func isNodeOnTop(of nodeA: SKShapeNode, on nodeB: SKShapeNode) -> Bool {
@@ -219,79 +221,71 @@ extension GameScene{
                                                                 height: 1))
         
         let isOnTop = nodeABottom <= nodeBTop && nodeATop > nodeBTop && isHorizontalAligned
-        
         return isOnTop
     }
     
-     
-//    func logBoxStrokePositions() {
-//        for (index, node) in createdNodes.enumerated() {
-//            let position = node.position
-//            print("BoxStroke \(index + 1): Position = (\(position.x), \(position.y))")
-//        }
-//        
-//        // Check the position of the last node
-//        if let lastNode = createdNodes.last {
-//            let lastArrayPosition = lastNode.position.y
-//            print("lastArrayPosition:", lastArrayPosition)
-//            
-//            // Adjust the tolerance as needed
-//            let targetPosition: CGFloat = 651
-//            let tolerance: CGFloat = 1.0 // Increase tolerance if needed
-//            
-//            let roundedLastArrayPosition = round(lastArrayPosition * 100) / 100
-//            let roundTargestPostion = round(targetPosition * 100 ) / 100
-//            
-//            if abs(roundedLastArrayPosition - roundTargestPostion) <= tolerance {
-//                print("Level cleared!")
-//            } else {
-//                print("Condition not met: Difference is greater than tolerance")
-//            }
-//        }
-//    }
-    
     func logBoxStrokePositions() {
+        guard createdNodes.count >= 2 else { return }
         
-        for (index, node) in createdNodes.enumerated() {
-            let position = node.position
-            print("BoxStroke \(index + 1): Position = (\(position.x), \(position.y))")
+        // Delay checking positions to ensure nodes are placed properly
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // Adjust delay as needed
+            guard let lastNode = self.createdNodes.last else { return }
+            let secondLastNode = self.createdNodes[self.createdNodes.count - 2]
             
-            // Check if there's a next node to compare
-            if index < createdNodes.count - 1 {
-                
-                let currentTop = node.frame.origin.y + node.frame.size.height; print("currentTop",currentTop)
-                
-                let nextNode = createdNodes[index + 1]; print("nextNode",nextNode)
-                let nextBottom = nextNode.frame.origin.y; print("nextBottom",nextBottom)
-                let tolerance: CGFloat = 1.0
-                
-                let roundCurrentTop = round(currentTop * 100) / 100 ; print("roundCurrentTop",roundCurrentTop)
-                let roundNextBottom = round(nextBottom * 100) / 100 ; print("roundNextBottom",roundNextBottom)
-                
-                let targetPosition = CGPoint(x: UIScreen.main.bounds.width / 2, y: self.rectangleYPosition); print("targetPosition",targetPosition)
-                let screenHeight = UIScreen.main.bounds.height; print("screenHeight", screenHeight)
-                let yPosition : CGFloat = targetPosition.y ; print("yPosition", yPosition)
-                let finalPoint = screenHeight - yPosition; print("finalPoint",finalPoint)
-                
-                
-                let secondTargetPosition : CGFloat = finalPoint - self.nodeHeight; print("secondTargetPosition",secondTargetPosition)
-                
-                if abs(roundNextBottom - roundCurrentTop) <= tolerance {
-                    print("BoxStroke \(index + 1) top matches BoxStroke \(index + 2) bottom.")
-                    if roundNextBottom >= finalPoint && roundCurrentTop >= secondTargetPosition  {
-                        print("Level Cleared")
-                    }else {
-                        print("TryAgain!")
-                    }
-                    
+            let currentTop = lastNode.frame.origin.y + lastNode.frame.size.height
+            let secondLastTop = secondLastNode.frame.origin.y + secondLastNode.frame.size.height
+            
+            let targetYPosition = self.size.height - 125
+            let secondTargetPosition: CGFloat = targetYPosition - self.nodeHeight
+            
+            // Convert to Int to ignore floating-point precision issues
+            let intCurrentTop = Int(currentTop)
+            let intSecondLastTop = Int(secondLastTop)
+            let intTargetYPosition = Int(targetYPosition)
+            let intSecondTargetPosition = Int(secondTargetPosition)
+            
+            // Debug output to see exact values after the delay
+            print("intCurrentTop after delay:", intCurrentTop)
+            print("intTargetYPosition after delay:", intTargetYPosition)
+            print("intsecondTargetPosition after delay:", intSecondTargetPosition)
+            
+            // Check if the top of the last node and second last node match the target positions
+            if intCurrentTop >= intTargetYPosition {
+                if intSecondLastTop >= intSecondTargetPosition {
+                    self.finishBar.strokeColor = .green
+                    self.advanceToNextLevel()
+                    print("Level Cleared after delay")
                 } else {
-                    print("BoxStroke \(index + 1) top does NOT match BoxStroke \(index + 2) bottom.")
+                    print("Try again, still left after delay!")
                 }
             }
         }
-        
     }
-
+    
+    
+    func advanceToNextLevel() {
+        let nextLevelNumber = currentLevelNumber + 1
+        if let nextLevel = loadLevel(myLevelNumber: nextLevelNumber) {
+            currentLevelNumber = nextLevelNumber
+            setupScene(for: nextLevel)
+        }else {
+            print("No more levels. Game Over!")
+        }
+    }
+    
+    
+    func loadLevel(myLevelNumber: Int) -> GameLevel? {
+        return levels.first{ $0.levelNumber == myLevelNumber} ??  GameLevel(levelNumber: 01, nodeSize: CGSize(width: 80, height: 80))
+    }
+    
+    
+    func setupScene(for level: GameLevel){
+        self.scene?.removeAllChildren()
+        self.scene?.removeAllActions()
+    }
+    
+ 
 }
+
 
 

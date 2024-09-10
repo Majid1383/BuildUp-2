@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		018BFDDF2C860B6B005B998F /* GlobalFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018BFDDE2C860B6B005B998F /* GlobalFunctions.swift */; };
 		01E982992C85A81000566ED3 /* ObjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E982982C85A81000566ED3 /* ObjectModel.swift */; };
+		CF41B8552C8F81050026AF0B /* Levels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF41B8542C8F81050026AF0B /* Levels.swift */; };
 		CF7583302C85480100DBEEC7 /* BuildUpApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF75832F2C85480100DBEEC7 /* BuildUpApp.swift */; };
 		CF7583322C85480100DBEEC7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7583312C85480100DBEEC7 /* ContentView.swift */; };
 		CF7583342C85480200DBEEC7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF7583332C85480200DBEEC7 /* Assets.xcassets */; };
@@ -20,6 +21,7 @@
 /* Begin PBXFileReference section */
 		018BFDDE2C860B6B005B998F /* GlobalFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunctions.swift; sourceTree = "<group>"; };
 		01E982982C85A81000566ED3 /* ObjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectModel.swift; sourceTree = "<group>"; };
+		CF41B8542C8F81050026AF0B /* Levels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Levels.swift; sourceTree = "<group>"; };
 		CF75832C2C85480100DBEEC7 /* BuildUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuildUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF75832F2C85480100DBEEC7 /* BuildUpApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildUpApp.swift; sourceTree = "<group>"; };
 		CF7583312C85480100DBEEC7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 				CF7583412C854C5A00DBEEC7 /* GameSceneView.swift */,
 				CF75833F2C854AE000DBEEC7 /* GameScene.swift */,
 				01E982982C85A81000566ED3 /* ObjectModel.swift */,
+				CF41B8542C8F81050026AF0B /* Levels.swift */,
 				018BFDDE2C860B6B005B998F /* GlobalFunctions.swift */,
 				CF7583332C85480200DBEEC7 /* Assets.xcassets */,
 				CF7583352C85480200DBEEC7 /* Preview Content */,
@@ -150,6 +153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF7583322C85480100DBEEC7 /* ContentView.swift in Sources */,
+				CF41B8552C8F81050026AF0B /* Levels.swift in Sources */,
 				01E982992C85A81000566ED3 /* ObjectModel.swift in Sources */,
 				018BFDDF2C860B6B005B998F /* GlobalFunctions.swift in Sources */,
 				CF7583422C854C5A00DBEEC7 /* GameSceneView.swift in Sources */,

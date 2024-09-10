@@ -10,45 +10,30 @@ import SpriteKit
 
 struct GameSceneView: View {
     
-    @StateObject private var gameScene = GameScene()
-    @State private var rectangleYPosition: CGFloat = 60
+//    @StateObject private var gameScene = GameScene()
     
     var scene: SKScene{
         
         let scene = GameScene()
         let screenSize = UIScreen.main.bounds.size
         scene.size = screenSize
-        scene.scaleMode = .aspectFill
-        scene.backgroundColor = .gray
-        scene.updateRectanglePosition(yPosition: rectangleYPosition)
+        scene.scaleMode = .aspectFit
+        scene.backgroundColor = .clear
         return scene
     }
     
-        var body: some View {
-            ZStack{
-                 
-                SpriteView(scene: scene)
-                    .edgesIgnoringSafeArea(.all)
-                
-//                Rectangle()
-//                    .stroke(
-//                        Color.green, style: StrokeStyle(lineWidth: 1))
-//                    .frame(width: UIScreen.main.bounds.width, height: 1)
-//                    .position(x: UIScreen.main.bounds.width / 2 , y: 60)
-         
-                
-//                Rectangle()
-//                    .stroke(
-//                        Color.green, style: StrokeStyle(lineWidth: 1))
-//                    .frame(width: UIScreen.main.bounds.width, height: 1)
-//                    .position(x: UIScreen.main.bounds.width / 2, y: rectangleYPosition)
-            }
+    var body: some View {
+        ZStack{
+            SpriteView(scene: scene)
+                .edgesIgnoringSafeArea(.vertical)
         }
-}
-
-struct GameSceneView_Preview: PreviewProvider{
-    static var previews: some View{
-        GameSceneView()
+            
     }
-
+    
+    struct GameSceneView_Preview: PreviewProvider{
+        static var previews: some View{
+            GameSceneView()
+        }
+    }
+    
 }

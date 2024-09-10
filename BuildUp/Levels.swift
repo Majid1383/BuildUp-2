@@ -6,3 +6,15 @@
 //
 
 import Foundation
+
+struct GameLevel{
+    let levelNumber : Int
+    let nodeSize : CGSize
+}
+
+
+
+
+
+
+                    
