@@ -25,13 +25,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var createdNodes: [SKShapeNode] = []
     
     var finishBar = SKShapeNode()
+    var stage = SKShapeNode()
     
-    var currentLevelNumber : Int = 1
+    var isCheckingLevel = false
     
-    let levels : [GameLevel] = [GameLevel(levelNumber: 01, nodeSize: BoxSize.square(10).size),
-                                GameLevel(levelNumber: 02, nodeSize: BoxSize.rectangle(20,40).size),
-                                GameLevel(levelNumber: 03, nodeSize: BoxSize.square(40).size)]
-   
+    var currentLevelNumber : Int = 3
+    
+    let levels : [GameLevel] = [GameLevel(levelNumber: 01, nodeSize: BoxSize.square(60).size),
+                               GameLevel(levelNumber: 02, nodeSize: BoxSize.square(50).size),
+                                GameLevel(levelNumber: 03, nodeSize: BoxSize.rectangle(60, 80).size)]
+    
+                                
     override func didMove(to view: SKView) {
         
         self.physicsWorld.contactDelegate = self
@@ -44,7 +48,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         self.physicsWorld.contactDelegate = self
         
-        let stage = globalFunctions.createCustomShapeNode(rectOfSize: BoxSize.rectangle(150, 1).size,
+        self.stage = globalFunctions.createCustomShapeNode(rectOfSize: BoxSize.rectangle(150, 1).size,
                                                           fillColor: .clear,
                                                           strokeColor: .red,
                                                           lineWidth: 2,
@@ -58,13 +62,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         stage.physicsBody?.categoryBitMask = stageCategory
         stage.physicsBody?.contactTestBitMask = boxStrokeCategory
         stage.physicsBody?.collisionBitMask = boxStrokeCategory
-        
-//        let stageWidth = self.size.width - 5
-//        stage.scene?.size = CGSize(width: stageWidth, height: stage.frame.size.height)
-//        
-//        let stagePosition = CGPoint(x: self.size.width / 2 , y: stage.frame.size.height / 2 + 5)
-//        stage.position = stagePosition
-        
+
         let stagePosition = CGPoint(x: self.size.width / 2 , y: stage.frame.size.height / 2 + 5)
         stage.position = stagePosition
         
@@ -82,25 +80,46 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         self.addChild(finishBar)
     }
     
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        
+//        guard let touch = touches.first else {return}
+//        let touchPoint = touch.location(in: self)
+//        
+//        let boxStroke = createBoxStroke()
+//        boxStroke.position = touchPoint
+//        boxStroke.physicsBody?.density = 3.0
+//        
+//        if !isOverLapping(newNode: boxStroke) {
+//            addChild(boxStroke)
+//            createdNodes.append(boxStroke)
+//            print("createdNodes", createdNodes.count)
+//        } else {
+////            print("Node is overlapping, can't add!")
+//        }
+//        
+//    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         guard let touch = touches.first else {return}
         let touchPoint = touch.location(in: self)
-         
-        guard let level = loadLevel(myLevelNumber: currentLevelNumber) else {return}
         
-        let boxStroke = createBoxStroke()
-        boxStroke.position = touchPoint
-        boxStroke.physicsBody?.density = 3.0
-        
-        if !isOverLapping(newNode: boxStroke) {
-            addChild(boxStroke)
-            createdNodes.append(boxStroke)
-            print("createdNodes", createdNodes.count)
-        } else {
-//            print("Node is overlapping, can't add!")
+        if let currentLevel = loadLevel(levelNumber: currentLevelNumber) {
+            
+            let boxStroke = createBoxStroke(for: currentLevel)
+            boxStroke.position = touchPoint
+            boxStroke.physicsBody?.density = 3.0
+            
+            if !isOverLapping(newNode: boxStroke) {
+                addChild(boxStroke)
+                createdNodes.append(boxStroke)
+                print("createdNodes", createdNodes.count)
+            } else {
+                print("Node is overlapping, can't add!")
+            }
+            
         }
-        
+         
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -176,12 +195,40 @@ extension GameScene{
         return SKColor(red: components[0], green: components[1], blue: components[2], alpha: 1.0)
     }
     
-    func createBoxStroke() -> SKShapeNode {
+//    func createBoxStroke() -> SKShapeNode {
+//        
+//        let size = BoxSize.rectangle(70, 70).size
+//        let height = size.height
+//        self.nodeHeight = height
+//        
+//        let boxStroke = globalFunctions.createCustomShapeNode(
+//            rectOfSize: size,
+//            fillColor: .clear,
+//            strokeColor: randomNeonColor(),
+//            lineWidth: 4,
+//            affectedByGravity: true,
+//            isDynamic: true,
+//            allowsRotation: true,
+//            linearDamping: 0.1,
+//            friction: 0.5,
+//            restitution: 0.1
+//        )
+//        
+//        let contactBitMask: UInt32 = stageCategory | boxStrokeCategory
+//        
+//        boxStroke.physicsBody = SKPhysicsBody(rectangleOf: boxStroke.frame.size)
+//        boxStroke.physicsBody?.categoryBitMask = boxStrokeCategory
+//        boxStroke.physicsBody?.contactTestBitMask = contactBitMask
+//        boxStroke.physicsBody?.collisionBitMask = contactBitMask
+//        
+//        return boxStroke
+//    }
+    
+    func createBoxStroke(for level : GameLevel) -> SKShapeNode {
         
-        let size = BoxSize.rectangle(70, 70).size
+        let size = level.nodeSize
         let height = size.height
         self.nodeHeight = height
-        //        print("self.nodeHeight",self.nodeHeight)
         
         let boxStroke = globalFunctions.createCustomShapeNode(
             rectOfSize: size,
@@ -224,67 +271,124 @@ extension GameScene{
         return isOnTop
     }
     
+//    func logBoxStrokePositions() {
+//        guard createdNodes.count >= 2 else { return }
+//        // Adjust delay as needed
+//            guard let lastNode = self.createdNodes.last else { return }
+//            let secondLastNode = self.createdNodes[self.createdNodes.count - 2]
+//            
+//            let currentTop = lastNode.frame.origin.y + lastNode.frame.size.height
+//            let secondLastTop = secondLastNode.frame.origin.y + secondLastNode.frame.size.height
+//            
+//            let targetYPosition = self.size.height - 125
+//            let secondTargetPosition: CGFloat = targetYPosition - self.nodeHeight
+//            
+//            // Convert to Int to ignore floating-point precision issues
+//            let intCurrentTop = Int(currentTop)
+//            let intSecondLastTop = Int(secondLastTop)
+//            let intTargetYPosition = Int(targetYPosition)
+//            let intSecondTargetPosition = Int(secondTargetPosition)
+//           
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+//           
+//            if intSecondLastTop >= intSecondTargetPosition {
+//                if intCurrentTop >= intTargetYPosition {
+//                    self.finishBar.strokeColor = .green
+//                    
+//                    self.levelCleared()
+//                    
+//                    print("Level Cleared after delay")
+//                } else {
+//                    print("Just a little left")
+//                }
+//            } else {
+//                print("Try again, still left after delay!")
+//            }
+//            
+//        }
+//        
+//    }
+    
+// Add this flag to track if checking is in progress
+    
     func logBoxStrokePositions() {
-        guard createdNodes.count >= 2 else { return }
+        // Prevent multiple checks from happening simultaneously
+        guard !isCheckingLevel else { return }
         
-        // Delay checking positions to ensure nodes are placed properly
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // Adjust delay as needed
-            guard let lastNode = self.createdNodes.last else { return }
-            let secondLastNode = self.createdNodes[self.createdNodes.count - 2]
+        isCheckingLevel = true  // Set the flag to true when checking starts
+
+        guard createdNodes.count >= 2 else {
+            isCheckingLevel = false // Reset the flag if not enough nodes
+            return
+        }
+        
+        guard let lastNode = self.createdNodes.last else {
+            isCheckingLevel = false // Reset the flag if last node is missing
+            return
+        }
+        
+        let secondLastNode = self.createdNodes[self.createdNodes.count - 2]
+        
+        let currentTop = lastNode.frame.origin.y + lastNode.frame.size.height
+        let secondLastTop = secondLastNode.frame.origin.y + secondLastNode.frame.size.height
+        
+        let targetYPosition = self.size.height - 125
+        let secondTargetPosition: CGFloat = targetYPosition - self.nodeHeight
+        
+        // Convert to Int to ignore floating-point precision issues
+        let intCurrentTop = Int(currentTop)
+        let intSecondLastTop = Int(secondLastTop)
+        let intTargetYPosition = Int(targetYPosition)
+        let intSecondTargetPosition = Int(secondTargetPosition)
+        
+        // Execute logic with delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             
-            let currentTop = lastNode.frame.origin.y + lastNode.frame.size.height
-            let secondLastTop = secondLastNode.frame.origin.y + secondLastNode.frame.size.height
-            
-            let targetYPosition = self.size.height - 125
-            let secondTargetPosition: CGFloat = targetYPosition - self.nodeHeight
-            
-            // Convert to Int to ignore floating-point precision issues
-            let intCurrentTop = Int(currentTop)
-            let intSecondLastTop = Int(secondLastTop)
-            let intTargetYPosition = Int(targetYPosition)
-            let intSecondTargetPosition = Int(secondTargetPosition)
-            
-            // Debug output to see exact values after the delay
-            print("intCurrentTop after delay:", intCurrentTop)
-            print("intTargetYPosition after delay:", intTargetYPosition)
-            print("intsecondTargetPosition after delay:", intSecondTargetPosition)
-            
-            // Check if the top of the last node and second last node match the target positions
-            if intCurrentTop >= intTargetYPosition {
-                if intSecondLastTop >= intSecondTargetPosition {
+            if intSecondLastTop >= intSecondTargetPosition {
+                if intCurrentTop >= intTargetYPosition {
                     self.finishBar.strokeColor = .green
-                    self.advanceToNextLevel()
+                    self.levelCleared()
                     print("Level Cleared after delay")
                 } else {
-                    print("Try again, still left after delay!")
+                    print("Just a little left")
+                    self.isCheckingLevel = false
                 }
+            } else {
+                self.isCheckingLevel = false
+                print("Try again, still left after delay!")
+                
             }
+            
+            // Reset the flag after the logic finishes
+            
         }
     }
+
     
+    //LoadingLevels
     
-    func advanceToNextLevel() {
-        let nextLevelNumber = currentLevelNumber + 1
-        if let nextLevel = loadLevel(myLevelNumber: nextLevelNumber) {
-            currentLevelNumber = nextLevelNumber
+    func loadLevel(levelNumber: Int) -> GameLevel? {
+        return levels.first { $0.levelNumber == levelNumber}
+    }
+    
+    func levelCleared() {
+        print("Level Cleared, Congrats!")
+        
+        currentLevelNumber += 1
+        
+        if let nextLevel = loadLevel(levelNumber: currentLevelNumber){
             setupScene(for: nextLevel)
-        }else {
-            print("No more levels. Game Over!")
+        }else{
+            print("No More Levels!")
         }
     }
-    
-    
-    func loadLevel(myLevelNumber: Int) -> GameLevel? {
-        return levels.first{ $0.levelNumber == myLevelNumber} ??  GameLevel(levelNumber: 01, nodeSize: CGSize(width: 80, height: 80))
-    }
-    
     
     func setupScene(for level: GameLevel){
-        self.scene?.removeAllChildren()
-        self.scene?.removeAllActions()
+        self.removeAllChildren()
+        self.addChild(stage)
+        self.addChild(finishBar)
     }
     
- 
 }
 
 
