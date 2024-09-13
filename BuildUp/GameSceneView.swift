@@ -27,7 +27,6 @@ struct GameSceneView: View {
             SpriteView(scene: scene)
                 .edgesIgnoringSafeArea(.vertical)
         }
-            
     }
     
     struct GameSceneView_Preview: PreviewProvider{
