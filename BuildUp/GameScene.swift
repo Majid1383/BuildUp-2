@@ -32,9 +32,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var currentLevelNumber : Int = 1
     
     let levels : [GameLevel] = [GameLevel(levelNumber: 1, nodeSize: BoxSize.square(80).size),
-                               GameLevel(levelNumber: 2, nodeSize: BoxSize.square(80).size),
-                                GameLevel(levelNumber: 3, nodeSize: BoxSize.square(80).size)
-                                ]
+                                GameLevel(levelNumber: 2, nodeSize: BoxSize.square(70).size),
+                                GameLevel(levelNumber: 3, nodeSize: BoxSize.square(60).size),
+                                GameLevel(levelNumber: 4, nodeSize: BoxSize.square(50).size),
+                                GameLevel(levelNumber: 5, nodeSize: BoxSize.square(40).size),
+                                GameLevel(levelNumber: 6, nodeSize: BoxSize.square(30).size)]
+                                
     
     var isLevelCleared : Bool = false
     
@@ -83,68 +86,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         self.addChild(finishBar)
     }
     
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//
-//        guard let touch = touches.first else {return}
-//        let touchPoint = touch.location(in: self)
-//
-//        if let currentLevel = loadLevel(levelNumber: currentLevelNumber) {
-//
-//            let boxStroke = createBoxStroke(for: currentLevel)
-//            boxStroke.position = touchPoint
-//            boxStroke.physicsBody?.density = 3.0
-//            print("currentLevelNumber",currentLevelNumber)
-//
-//            if !isOverLapping(newNode: boxStroke) {
-//                addChild(boxStroke)
-//                createdNodes.append(boxStroke)
-//                self.logBoxStrokePositions()
-//                print("createdNodes", createdNodes.count)
-//            } else {
-//                print("Node is overlapping, can't add!")
-//            }
-//
-//        }
-//
-//    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        guard let touch = touches.first else { return }
+
+        guard let touch = touches.first else {return}
         let touchPoint = touch.location(in: self)
 
-        // Loop through the levels array
-        for currentLevel in levels {
-            
-            // Extract the levelNumber from the current level
-            let levelNumber = currentLevel.levelNumber
-            
-            // Load the level using the levelNumber (which is an Int)
-            for myLevel in  1...levelNumber {
-                
-                if let loadedLevel = loadLevel(levelNumber: myLevel) {
-                    
-                    let boxStroke = createBoxStroke(for: loadedLevel)
-                    boxStroke.position = touchPoint
-                    boxStroke.physicsBody?.density = 3.0
-                    print("loadedLevel", loadedLevel)
-                    
-                    if !isOverLapping(newNode: boxStroke) {
-                        addChild(boxStroke)
-                        createdNodes.append(boxStroke)
-                        self.logBoxStrokePositions()
-                        print("createdNodes", createdNodes.count)
-                    } else {
-                        print("Node is overlapping, can't add!")
-                    }
-                }
-                
+        if let currentLevel = loadLevel(levelNumber: currentLevelNumber) {
+
+            let boxStroke = createBoxStroke(for: currentLevel)
+            boxStroke.position = touchPoint
+            boxStroke.physicsBody?.density = 3.0
+            print("currentLevelNumber",currentLevelNumber)
+
+            if !isOverLapping(newNode: boxStroke) {
+                addChild(boxStroke)
+                createdNodes.append(boxStroke)
+                self.logBoxStrokePositions()
+                print("createdNodes", createdNodes.count)
+            } else {
+                print("Node is overlapping, can't add!")
             }
+
         }
+
     }
 
-
-    
     override func update(_ currentTime: TimeInterval) {
         
         if let accelerometerData = motionManager.accelerometerData {
@@ -155,7 +121,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         for node in createdNodes {
             if node.position.y < -node.frame.height || node.position.x < -node.frame.width || node.position.x > size.width + node.frame.width {
-                
                 node.removeFromParent()
                 
                 if let index = createdNodes.firstIndex(of: node){
@@ -165,7 +130,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             }
         }
         
-       
+        
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -205,7 +170,6 @@ extension GameScene{
         }
         return false
     }
-    
     
     //RandomColour
     func randomNeonColor() -> SKColor {
@@ -336,10 +300,9 @@ extension GameScene{
                         print("Level Cleared...")
                         finishBar.strokeColor = .green
                         isLevelCleared = true
+                        self.removeChildren(in: self.createdNodes)
                         
-                        self.addDelay()
                     }
-                      
                 }
             }
         }
@@ -407,79 +370,6 @@ extension GameScene{
     func loadLevel(levelNumber: Int) -> GameLevel? {
         return levels.first { $0.levelNumber == levelNumber}
     }
-    
-    func levelCleared(currentLevel : Int) {
-        finishBar.strokeColor = .white
-        print("Level Cleared, Congrats!")
-        
-        print("Attempting to load level: \(currentLevel)")
-         if let nextLevel = loadLevel(levelNumber: currentLevel){
-            print("nextLevel",nextLevel)
-            print("Successfully loaded level \(currentLevel)")
-            setupScene(for: nextLevel)
-
-        }else{
-            print("No More Levels!")
-        }
-    }
-    
-    func setupScene(for level: GameLevel){
-        self.removeAllChildren()
-        self.addChild(stage)
-        self.addChild(finishBar)
-    }
-    
-    func addDelay(){
-        // Create the delay action
-        let delayAction = SKAction.wait(forDuration: 2.0)
-        // Create the action to remove all children
-        let removeChildrenAction = SKAction.run {
-            self.removeAllBoxStrokes()
-            self.createdNodes.removeAll()
-            print("currentLevelNumber", self.currentLevelNumber)
-        }
-        
-        self.restartLevel()
-        
-        // Sequence the actions: delay then remove children
-        let sequence = SKAction.sequence([delayAction, removeChildrenAction])
-        // Run the sequence on the scene
-        self.run(sequence)
-        
-    }
-    
-    func removeAllBoxStrokes() {
-        for node in createdNodes {
-            node.removeFromParent()
-        }
-        createdNodes.removeAll()
-    }
-    
-    func restartLevel() {
-        // Step 1: Remove all created nodes from the scene
-        for node in createdNodes {
-            node.removeFromParent()
-        }
-        
-        self.currentLevelNumber += 1
-        print("FinalcurrentLevelNumber",self.currentLevelNumber)
-        // Clear the createdNodes array
-        createdNodes.removeAll()
-        
-        // Step 2: Reset any necessary state
-        isLevelCleared = false
-        finishBar.strokeColor = .white // Or set it to its initial color
-        
-        // Step 3: Optionally restart the scene (if you want a full scene reset)
-        let newScene = GameScene(size: self.size)
-        newScene.backgroundColor = .clear
-        newScene.scaleMode = self.scaleMode
-        let transition = SKTransition.crossFade(withDuration: 1.0)
-        self.view?.presentScene(newScene, transition: transition)
-       
-    }
-
-
     
 }
 

@@ -13,7 +13,6 @@ struct GameSceneView: View {
 //    @StateObject private var gameScene = GameScene()
     
     var scene: SKScene{
-        
         let scene = GameScene()
         let screenSize = UIScreen.main.bounds.size
         scene.size = screenSize
@@ -34,5 +33,4 @@ struct GameSceneView: View {
             GameSceneView()
         }
     }
-    
 }
