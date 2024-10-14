@@ -26,22 +26,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
     var finishBar = SKShapeNode()
     var stage = SKShapeNode()
-    
-    var isCheckingLevel = false
-    
-    var currentLevelNumber : Int = 1
-    
-    let levels : [GameLevel] = [GameLevel(levelNumber: 1, nodeSize: BoxSize.square(80).size),
-                                GameLevel(levelNumber: 2, nodeSize: BoxSize.square(70).size),
-                                GameLevel(levelNumber: 3, nodeSize: BoxSize.square(60).size),
-                                GameLevel(levelNumber: 4, nodeSize: BoxSize.square(50).size),
-                                GameLevel(levelNumber: 5, nodeSize: BoxSize.square(40).size),
-                                GameLevel(levelNumber: 6, nodeSize: BoxSize.square(30).size)]
-                                
-    
+        
     var isLevelCleared : Bool = false
     
-                                
+    var currentLevelNumber: Int = 1
+     
+    let levelManager = LevelManager()
+    var currentLevel: GameLevel? {   //Added Level in separate LevelManager
+        guard currentLevelNumber > 0 && currentLevelNumber <= levelManager.levels.count else {
+            return nil
+        }
+        return levelManager.levels[currentLevelNumber - 1]
+    }
+ 
     override func didMove(to view: SKView) {
         
         self.physicsWorld.contactDelegate = self
@@ -130,7 +127,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             }
         }
         
-        
+        if isLevelCleared {
+            handleLevelCleared()
+            print("DEBUG: isLevel Cleared!")
+        }
+    }
+    
+    func handleLevelCleared() {
+        // Step 1: Remove all existing nodes
+//        clearBoxNodes()
+        // Step 2: Update level and adjust game difficulty
+        currentLevelNumber += 1 ; print("DEBUG: currentLevelNumber += 1 ", currentLevelNumber)
+        // Step 4: Reset the level cleared flag
+        finishBar.strokeColor = .white
+        isLevelCleared = false ;  print("DEBUG: isLevelCleared ", isLevelCleared)
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -161,6 +171,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 
 //MARK: Custom Functions
 extension GameScene{
+    
     //Stop OverLapping
     func isOverLapping(newNode: SKShapeNode) -> Bool {
         for node in self.children where node is SKShapeNode {
@@ -171,46 +182,7 @@ extension GameScene{
         return false
     }
     
-    //RandomColour
-    func randomNeonColor() -> SKColor {
-        let randomColorComponent = { CGFloat.random(in: 0.5...1.0) }
-        let red = randomColorComponent()
-        let green = randomColorComponent()
-        let blue = randomColorComponent()
-        
-        let components = [red, green, blue].shuffled()
-        return SKColor(red: components[0], green: components[1], blue: components[2], alpha: 1.0)
-    }
-    
-//    func createBoxStroke() -> SKShapeNode {
-//        
-//        let size = BoxSize.rectangle(70, 70).size
-//        let height = size.height
-//        self.nodeHeight = height
-//        
-//        let boxStroke = globalFunctions.createCustomShapeNode(
-//            rectOfSize: size,
-//            fillColor: .clear,
-//            strokeColor: randomNeonColor(),
-//            lineWidth: 4,
-//            affectedByGravity: true,
-//            isDynamic: true,
-//            allowsRotation: true,
-//            linearDamping: 0.1,
-//            friction: 0.5,
-//            restitution: 0.1
-//        )
-//        
-//        let contactBitMask: UInt32 = stageCategory | boxStrokeCategory
-//        
-//        boxStroke.physicsBody = SKPhysicsBody(rectangleOf: boxStroke.frame.size)
-//        boxStroke.physicsBody?.categoryBitMask = boxStrokeCategory
-//        boxStroke.physicsBody?.contactTestBitMask = contactBitMask
-//        boxStroke.physicsBody?.collisionBitMask = contactBitMask
-//        
-//        return boxStroke
-//    }
-    
+ 
     func createBoxStroke(for level : GameLevel) -> SKShapeNode {
         
         let size = level.nodeSize
@@ -220,7 +192,7 @@ extension GameScene{
         let boxStroke = globalFunctions.createCustomShapeNode(
             rectOfSize: size,
             fillColor: .black,
-            strokeColor: randomNeonColor(),
+            strokeColor: globalFunctions.randomNeonColor(),
             lineWidth: 4,
             affectedByGravity: true,
             isDynamic: true,
@@ -260,6 +232,7 @@ extension GameScene{
     
     
     func logBoxStrokePositions() {
+        
         guard createdNodes.count >= 3 else { return }
         // Adjust delay as needed
         guard let lastNode = self.createdNodes.last else { return }
@@ -292,86 +265,112 @@ extension GameScene{
         print("intThirdTargetPosition",intThirdTargetPosition)
         
         
-        if intThirdLastTop >= intThirdTargetPosition {
-            if intSecondLastTop >= intSecondTargetPosition {
-                if intCurrentTop >= intTargetYPosition {
-                    
-                    if !isLevelCleared {
-                        print("Level Cleared...")
-                        finishBar.strokeColor = .green
-                        isLevelCleared = true
-                        self.removeChildren(in: self.createdNodes)
-                        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            guard let self = self else { return }
+            
+            if intThirdLastTop >= intThirdTargetPosition {
+                if intSecondLastTop >= intSecondTargetPosition {
+                    if intCurrentTop >= intTargetYPosition {
+                        if !self.isLevelCleared {
+                            print("Level Cleared...")
+                            self.finishBar.strokeColor = .green
+                            self.isLevelCleared = true
+                            
+                            // Loop through each created node and apply the bust effect
+                            for node in self.createdNodes {
+                                if let shapeNode = node as? SKShapeNode {
+                                    shapeNode.fallingEffect()
+                                } // Assuming bustEffect is defined in the SKShapeNode extension
+                            }
+                            
+                            // Optionally, remove all nodes after the bust effect
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { // Wait for effect duration
+                                for node in self.createdNodes {
+                                    node.removeFromParent() // Remove each node from the scene
+                                }
+                                self.createdNodes.removeAll() // Clear the array
+                            }
+                        }
                     }
                 }
             }
         }
+
+        
+        finishBar.strokeColor = .white
         
     }
-    
-// Add this flag to track if checking is in progress
-    
-//    func logBoxStrokePositions() {
-//        // Prevent multiple checks from happening simultaneously
-//        guard !isCheckingLevel else { return }
-//
-//        isCheckingLevel = true  // Set the flag to true when checking starts
-//
-//        guard createdNodes.count >= 2 else {
-//            isCheckingLevel = false // Reset the flag if not enough nodes
-//            return
-//        }
-//
-//        guard let lastNode = self.createdNodes.last else {
-//            isCheckingLevel = false // Reset the flag if last node is missing
-//            return
-//        }
-//
-//        let secondLastNode = self.createdNodes[self.createdNodes.count - 2]
-//
-//        let currentTop = lastNode.frame.origin.y + lastNode.frame.size.height
-//        let secondLastTop = secondLastNode.frame.origin.y + secondLastNode.frame.size.height
-//
-//        let targetYPosition = self.size.height - 125
-//        let secondTargetPosition: CGFloat = targetYPosition - self.nodeHeight
-//
-//        // Convert to Int to ignore floating-point precision issues
-//        let intCurrentTop = Int(currentTop)
-//        let intSecondLastTop = Int(secondLastTop)
-//        let intTargetYPosition = Int(targetYPosition)
-//        let intSecondTargetPosition = Int(secondTargetPosition)
-//
-//        // Execute logic with delay
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//
-//            if intSecondLastTop >= intSecondTargetPosition {
-//                if intCurrentTop >= intTargetYPosition {
-//
-//                    self.finishBar.strokeColor = .green
-//
-//                    self.currentLevelNumber += 1
-//                    let currentLevel = self.currentLevelNumber
-//                    print("currentLevel",currentLevel)
-//                    self.levelCleared(currentLevel: currentLevel)
-//
-//
-//                } else {
-//                    print("Just a little left")
-//                    self.isCheckingLevel = false
-//                }
-//            } else {
-//                self.isCheckingLevel = false
-//                print("Try again, still left after delay!")
-//            }
-//
-//        }
-//    }
 
     func loadLevel(levelNumber: Int) -> GameLevel? {
-        return levels.first { $0.levelNumber == levelNumber}
+        return levelManager.levels.first { $0.levelNumber == levelNumber}
     }
     
 }
+
+extension GameScene {
+    
+    func clearBoxNodes() {
+        self.removeChildren(in: self.createdNodes)
+        print("DEBUG: Clearing BoxNodesNow!")
+    }
+    
+}
+
+extension SKShapeNode {
+    
+    func fallingEffect() {
+        // Ensure the path is valid
+        guard let path = self.path else { return }
+        
+        // Create a bounding box from the path
+        let boundingBox = path.boundingBox
+        
+        // Apply gravity by enabling physics with the bounding box
+        self.physicsBody = SKPhysicsBody(rectangleOf: boundingBox.size)
+        self.physicsBody?.affectedByGravity = true
+        self.physicsBody?.categoryBitMask = 1 // Set a category if needed
+        self.physicsBody?.collisionBitMask = 1 // Set collision mask if needed
+        self.physicsBody?.contactTestBitMask = 1 // Set contact mask if needed
+        
+        // Optional: Add a small random torque for a more dynamic falling effect
+        let randomTorque = CGFloat.random(in: -0.5...0.5)
+        self.physicsBody?.applyTorque(randomTorque)
+        
+        self.physicsBody?.velocity = CGVector(dx: 0, dy: -700)
+    }
+}
+
+
+
+
+//extension SKShapeNode {
+//    func bustEffect() {
+//        // Scale up slowly
+//        let scaleUp = SKAction.scale(to: 1.5, duration: 0.2) // Increased duration
+//        // Rotate slowly
+//        let rotate = SKAction.rotate(byAngle: CGFloat.pi / 4, duration: 0.2) // Increased duration
+//        // Scale down slowly
+//        let scaleDown = SKAction.scale(to: 0.5, duration: 0.2) // Increased duration
+//        
+//        // Fade out slowly
+//        let fadeOut = SKAction.fadeOut(withDuration: 0.3) // Increased duration
+//        
+//        // Move up slightly
+//        let moveUp = SKAction.moveBy(x: 0, y: 15, duration: 0.2) // Increased upward movement for more effect
+//
+//        // Combine actions
+//        let bustSequence = SKAction.sequence([
+//            SKAction.group([scaleUp, rotate, moveUp]), // Scale up, rotate, and move up together
+//            scaleDown,
+//            fadeOut
+//        ])
+//        
+//        // Remove the node after the effect
+//        self.run(bustSequence) {
+//            self.removeFromParent() // Remove the node after the effect
+//        }
+//    }
+//}
 
 
 
